@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Phân loại Hoa</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: left;
+        }
+
+        .result p {
+            margin: 8px 0;
+        }
+
+        .result .main {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #2a9d8f;
+        }
+
+        form button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Tải ảnh hoa để phân loại</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="flowerImage" required>
+            <button type="submit">Phân loại</button>
+        </form>
+
+        <% if (locals.error) { %>
+            <p style="color: red;">
+                <%= error %>
+            </p>
+            <% } %>
+
+                <% if (locals.imageFile) { %>
+                    <img src="<%= imageFile %>" alt="Uploaded Flower">
+                    <% } %>
+
+                        <% if (locals.predictions && predictions.length> 0) { %>
+                            <div class="result">
+                                <h2>Kết quả dự đoán:</h2>
+                                <p class="main">
+                                    <%= predictions[0].label %> (<%= predictions[0].probability %>)
+                                </p>
+                                <% for(let i=1; i < predictions.length; i++) { %>
+                                    <p>
+                                        <%= predictions[i].label %>: <%= predictions[i].probability %>
+                                    </p>
+                                    <% } %>
+                            </div>
+                            <% } %>
+    </div>
+</body>
+
+</html>
